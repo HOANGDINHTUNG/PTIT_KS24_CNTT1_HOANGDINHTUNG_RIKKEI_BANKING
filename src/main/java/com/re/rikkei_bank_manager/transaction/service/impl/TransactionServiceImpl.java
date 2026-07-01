@@ -5,9 +5,8 @@ import com.re.rikkei_bank_manager.account.repository.AccountRepository;
 import com.re.rikkei_bank_manager.common.enums.*;
 import com.re.rikkei_bank_manager.common.exception.*;
 import com.re.rikkei_bank_manager.common.util.SecurityUtils;
-import com.re.rikkei_bank_manager.transaction.dto.request.TransferRequest;
-import com.re.rikkei_bank_manager.transaction.dto.response.StatementResponse;
-import com.re.rikkei_bank_manager.transaction.dto.response.TransferResponse;
+import com.re.rikkei_bank_manager.transaction.dto.request.*;
+import com.re.rikkei_bank_manager.transaction.dto.response.*;
 import com.re.rikkei_bank_manager.transaction.entity.BankTransaction;
 import com.re.rikkei_bank_manager.transaction.repository.TransactionRepository;
 import com.re.rikkei_bank_manager.user.entity.User;
@@ -77,6 +76,69 @@ public class TransactionServiceImpl implements TransactionService {
             return transactionMapper.toTransferResponse(tx);
         } catch (Exception e) {
             log.error("Đã xảy ra lỗi trong quá trình chuyển khoản: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Override
+    @Transactional
+    public DepositResponse customerDeposit(CustomerDepositRequest req) {
+        log.info("Khách hàng đang nạp tiền vào tài khoản {} số tiền: {}", req.getAccountNumber(), req.getAmount());
+        try {
+            User user = getCurrentUser();
+            if (!user.isKyc()) throw new ForbiddenException("Account must complete KYC before depositing");
+
+            Account to = accountRepository.findByAccountNumberForUpdate(req.getAccountNumber())
+                    .orElseThrow(() -> new ResourceNotFoundException("Target account not found"));
+            
+            if (!java.util.Objects.equals(to.getUser().getId(), user.getId())) 
+                throw new ForbiddenException("You can only deposit money to your own account");
+            if (!to.isActive()) throw new BadRequestException("Target account is inactive");
+            if (!passwordEncoder.matches(req.getTransactionPin(), to.getTransactionPin())) 
+                throw new ForbiddenException("Transaction PIN is incorrect");
+
+            to.setBalance(to.getBalance().add(req.getAmount()));
+            BankTransaction tx = transactionRepository.save(BankTransaction.builder()
+                    .transactionCode("DEP-" + UUID.randomUUID().toString().replace("-", "").substring(0, 18).toUpperCase())
+                    .fromAccount(null).toAccount(to).amount(req.getAmount()).description("Nạp tiền tài khoản")
+                    .status(TransactionStatus.SUCCESS).createdAt(LocalDateTime.now()).build());
+            
+            log.info("Khách hàng tự nạp tiền thành công: {}", tx.getTransactionCode());
+            return DepositResponse.builder().transactionCode(tx.getTransactionCode())
+                    .accountNumber(to.getAccountNumber()).amount(req.getAmount())
+                    .newBalance(to.getBalance()).timestamp(tx.getCreatedAt()).build();
+        } catch (Exception e) {
+            log.error("Lỗi khi khách hàng tự nạp tiền: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Override
+    @Transactional
+    public DepositResponse staffDeposit(StaffDepositRequest req) {
+        log.info("Nhân viên đang nạp hộ tiền vào tài khoản {} số tiền: {}", req.getAccountNumber(), req.getAmount());
+        try {
+            User staff = getCurrentUser();
+            if (!staff.isActive()) throw new ForbiddenException("Staff account is disabled or locked");
+
+            Account to = accountRepository.findByAccountNumberForUpdate(req.getAccountNumber())
+                    .orElseThrow(() -> new ResourceNotFoundException("Target account not found or does not exist"));
+
+            if (!to.isActive()) throw new BadRequestException("Customer account is inactive, cannot deposit");
+
+            to.setBalance(to.getBalance().add(req.getAmount()));
+            BankTransaction tx = transactionRepository.save(BankTransaction.builder()
+                    .transactionCode("DEP-" + UUID.randomUUID().toString().replace("-", "").substring(0, 18).toUpperCase())
+                    .fromAccount(null).toAccount(to).amount(req.getAmount())
+                    .description(req.getDescription() != null ? req.getDescription() : "Nhân viên nạp tiền tại quầy")
+                    .status(TransactionStatus.SUCCESS).createdAt(LocalDateTime.now()).build());
+            
+            log.info("Nhân viên nạp tiền thành công: {}", tx.getTransactionCode());
+            return DepositResponse.builder().transactionCode(tx.getTransactionCode())
+                    .accountNumber(to.getAccountNumber()).amount(req.getAmount())
+                    .newBalance(to.getBalance()).timestamp(tx.getCreatedAt()).build();
+        } catch (Exception e) {
+            log.error("Lỗi khi nhân viên nạp tiền: {}", e.getMessage(), e);
             throw e;
         }
     }

@@ -3,6 +3,8 @@ package com.re.rikkei_bank_manager.auth.dto.request;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +20,8 @@ public class RegisterKycRequest {
     private String username;
 
     @NotBlank(message = "Password is required")
+    @Size(min = 6, max = 50, message = "Must be between 6 and 50 characters")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$", message = "Must contain at least one uppercase letter, lowercase letter, and number")
     private String password;
 
     @NotBlank(message = "Phone number is required")

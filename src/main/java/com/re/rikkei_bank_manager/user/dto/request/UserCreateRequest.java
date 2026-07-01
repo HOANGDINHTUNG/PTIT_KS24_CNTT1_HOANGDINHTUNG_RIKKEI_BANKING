@@ -22,7 +22,7 @@ public class UserCreateRequest {
     private String phoneNumber;
 
     @NotBlank
-    @Email(message = "invalid format")
+    @Email(message = "Invalid format")
     @Size(max = 50, message = "Email cannot exceed 50 characters")
     private String email;
 

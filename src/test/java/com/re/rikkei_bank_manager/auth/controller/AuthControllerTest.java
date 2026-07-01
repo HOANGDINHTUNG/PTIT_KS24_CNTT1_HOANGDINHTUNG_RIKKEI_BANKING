@@ -41,9 +41,9 @@ public class AuthControllerTest {
     @Test
     void testRegister_Success() throws Exception {
         RegisterRequest req = new RegisterRequest();
-        req.setUsername("user1"); req.setPassword("pass"); req.setEmail("test@test.com"); req.setPhoneNumber("123");
+        req.setUsername("user123"); req.setPassword("Password@123"); req.setEmail("test@test.com"); req.setPhoneNumber("0901234567");
 
-        mockMvc.perform(post("/api/auth/register")
+        mockMvc.perform(post("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isCreated());
@@ -53,7 +53,7 @@ public class AuthControllerTest {
     void testRegister_InvalidRequest() throws Exception {
         RegisterRequest req = new RegisterRequest(); 
         
-        mockMvc.perform(post("/api/auth/register")
+        mockMvc.perform(post("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isBadRequest());
@@ -62,12 +62,12 @@ public class AuthControllerTest {
     @Test
     void testLogin_Success() throws Exception {
         LoginRequest req = new LoginRequest();
-        req.setUsername("user1"); req.setPassword("pass");
+        req.setUsername("user123"); req.setPassword("Password@123");
 
         AuthResponse res = AuthResponse.builder().accessToken("token").build();
         when(authService.login(any(LoginRequest.class))).thenReturn(res);
 
-        mockMvc.perform(post("/api/auth/login")
+        mockMvc.perform(post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk());
@@ -78,7 +78,7 @@ public class AuthControllerTest {
         LoginRequest req = new LoginRequest(); 
         req.setUsername("user1");
 
-        mockMvc.perform(post("/api/auth/login")
+        mockMvc.perform(post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isBadRequest());
@@ -86,7 +86,7 @@ public class AuthControllerTest {
 
     @Test
     void testLogout_Success() throws Exception {
-        mockMvc.perform(post("/api/auth/logout")
+        mockMvc.perform(post("/api/v1/auth/logout")
                 .header("Authorization", "Bearer valid_token"))
                 .andExpect(status().isOk());
     }

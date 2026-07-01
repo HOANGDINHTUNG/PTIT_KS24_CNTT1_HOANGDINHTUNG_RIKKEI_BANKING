@@ -2,6 +2,8 @@ package com.re.rikkei_bank_manager.transaction.controller;
 
 import com.re.rikkei_bank_manager.common.response.ApiResult;
 import com.re.rikkei_bank_manager.transaction.dto.request.TransferRequest;
+import com.re.rikkei_bank_manager.transaction.dto.request.CustomerDepositRequest;
+import com.re.rikkei_bank_manager.transaction.dto.response.DepositResponse;
 import com.re.rikkei_bank_manager.transaction.dto.response.StatementResponse;
 import com.re.rikkei_bank_manager.transaction.dto.response.TransferResponse;
 import com.re.rikkei_bank_manager.transaction.service.TransactionService;
@@ -34,6 +36,21 @@ public class CustomerTransactionController {
             return ResponseEntity.ok(ApiResult.success("Transferred money successfully", response));
         } catch (Exception e) {
             log.error("Lỗi trong quá trình tiếp nhận yêu cầu chuyển khoản: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Operation(summary = "Deposit Money", description = "Customer self-deposits money into their own account (Max 100M VND)")
+    @ApiResponse(responseCode = "200", description = "Deposit successful")
+    @PostMapping("/transactions/deposit")
+    public ResponseEntity<ApiResult<DepositResponse>> deposit(@Valid @RequestBody CustomerDepositRequest req) {
+        log.info("Khách hàng gửi request nạp tiền.");
+        try {
+            DepositResponse response = transactionService.customerDeposit(req);
+            log.info("Phản hồi nạp tiền thành công cho khách hàng.");
+            return ResponseEntity.ok(ApiResult.success("Deposited money successfully", response));
+        } catch (Exception e) {
+            log.error("Lỗi trong quá trình tiếp nhận yêu cầu nạp tiền: {}", e.getMessage(), e);
             throw e;
         }
     }

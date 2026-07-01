@@ -12,7 +12,7 @@ public class UserUpdateRequest {
     @Pattern(regexp = "^(0|\\+84)[0-9]{9}$", message = "Invalid Vietnamese phone number format")
     private String phoneNumber;
 
-    @Email(message = "invalid format")
+    @Email(message = "Invalid format")
     @Size(max = 50, message = "Email cannot exceed 50 characters")
     private String email;
 

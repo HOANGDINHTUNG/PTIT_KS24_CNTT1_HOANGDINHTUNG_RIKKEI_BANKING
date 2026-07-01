@@ -2,7 +2,6 @@ package com.re.rikkei_bank_manager.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.re.rikkei_bank_manager.common.response.ErrorResponse;
-import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
