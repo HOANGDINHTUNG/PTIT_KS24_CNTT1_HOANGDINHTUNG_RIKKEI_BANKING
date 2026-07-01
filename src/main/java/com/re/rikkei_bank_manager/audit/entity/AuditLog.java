@@ -6,8 +6,13 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
-@Entity @Table(name = "audit_logs")
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "audit_logs")
 public class AuditLog {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

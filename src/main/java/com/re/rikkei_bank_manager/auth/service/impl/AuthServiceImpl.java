@@ -28,16 +28,17 @@ import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service @RequiredArgsConstructor @Transactional(readOnly = true) @Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+@Slf4j
 public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
@@ -131,10 +132,30 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse login(LoginRequest req) {
         log.info("Bắt đầu xử lý đăng nhập cho user: {}", req.getUsername());
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
             User user = userRepository.findByUsername(req.getUsername())
                     .orElseThrow(() -> new UnauthorizedException("Invalid login information"));
-            if (!user.isActive()) throw new ForbiddenException("User account is disabled");
+
+            if (!user.isActive()) {
+                throw new ForbiddenException("User account is locked or disabled! Please contact support.");
+            }
+
+            try {
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
+                
+                if (user.getFailedLoginAttempts() > 0) {
+                    user.setFailedLoginAttempts(0);
+                    userRepository.save(user);
+                }
+            } catch (Exception ex) {
+                int attempts = user.getFailedLoginAttempts() + 1;
+                user.setFailedLoginAttempts(attempts);
+                if (attempts >= 5) {
+                    user.setActive(false); // Lock account
+                    log.warn("Tài khoản {} đã bị KHÓA do đăng nhập sai 5 lần liên tiếp", req.getUsername());
+                }
+                userRepository.save(user);
+                throw new UnauthorizedException("Invalid login information. Attempt " + attempts + "/5");
+            }
             
             log.info("Đăng nhập thành công cho user: {}", req.getUsername());
             return issueTokens(user);
@@ -232,6 +253,33 @@ public class AuthServiceImpl implements AuthService {
             log.info("Đặt lại mật khẩu thành công cho user: {}", token.getUser().getUsername());
         } catch (Exception e) {
             log.error("Đã xảy ra lỗi khi đặt lại mật khẩu: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(com.re.rikkei_bank_manager.auth.dto.request.ChangePasswordRequest req) {
+        log.info("Bắt đầu xử lý đổi mật khẩu chủ động.");
+        try {
+            String username = com.re.rikkei_bank_manager.common.util.SecurityUtils.getCurrentUsername();
+            if (username == null) throw new UnauthorizedException("Cannot identify current user");
+            
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                    
+            if (!passwordEncoder.matches(req.getOldPassword(), user.getPassword())) {
+                throw new BadRequestException("Mật khẩu cũ không chính xác");
+            }
+            if (passwordEncoder.matches(req.getNewPassword(), user.getPassword())) {
+                throw new BadRequestException("Mật khẩu mới không được trùng mật khẩu cũ");
+            }
+            
+            user.setPassword(passwordEncoder.encode(req.getNewPassword()));
+            userRepository.save(user);
+            log.info("Đổi mật khẩu thành công cho user: {}", username);
+        } catch (Exception e) {
+            log.error("Đã xảy ra lỗi khi đổi mật khẩu: {}", e.getMessage(), e);
             throw e;
         }
     }

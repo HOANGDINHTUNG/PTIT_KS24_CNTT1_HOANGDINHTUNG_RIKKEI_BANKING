@@ -4,7 +4,11 @@ import com.re.rikkei_bank_manager.common.enums.RoleName;
 import lombok.*;
 import java.time.LocalDateTime;
 
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserResponseDto {
     private Long id;
     private String username;

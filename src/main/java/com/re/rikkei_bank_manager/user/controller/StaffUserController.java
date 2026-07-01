@@ -2,11 +2,11 @@ package com.re.rikkei_bank_manager.user.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import com.re.rikkei_bank_manager.common.response.ApiResult;
 import com.re.rikkei_bank_manager.user.dto.response.UserResponseDto;
 import com.re.rikkei_bank_manager.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/staff/users")
 @RequiredArgsConstructor
 @Tag(name = "Staff User Management", description = "Staff End-User Management API")
-@lombok.extern.slf4j.Slf4j
+@Slf4j
 public class StaffUserController {
     private final UserService userService;
 

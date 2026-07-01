@@ -6,11 +6,19 @@ import java.math.BigDecimal;
 
 @Getter @Setter
 public class TransferRequest {
-    @NotBlank private String fromAccountNumber;
-    @NotBlank private String toAccountNumber;
-    @NotNull @DecimalMin(value = "0.01", message = "must be greater than 0")
+    @NotBlank
+    private String fromAccountNumber;
+
+    @NotBlank
+    private String toAccountNumber;
+
+    @NotNull
+    @DecimalMin(value = "0.01", message = "must be greater than 0")
     private BigDecimal amount;
+
+    @Size(max = 255, message = "Description cannot exceed 255 characters")
     private String description;
+
     @NotBlank 
     @Pattern(regexp = "^[0-9]{6}$", message = "must contain exactly 6 digits")
     private String transactionPin;

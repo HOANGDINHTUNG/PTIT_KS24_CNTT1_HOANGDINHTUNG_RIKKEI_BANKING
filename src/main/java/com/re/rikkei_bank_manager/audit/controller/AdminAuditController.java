@@ -8,6 +8,7 @@ import com.re.rikkei_bank_manager.audit.mapper.AuditLogMapper;
 import com.re.rikkei_bank_manager.audit.repository.AuditLogRepository;
 import com.re.rikkei_bank_manager.common.response.ApiResult;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/admin/audit-logs")
 @RequiredArgsConstructor
 @Tag(name = "Admin Audit Logs", description = "Admin Audit Logs Management API")
-@lombok.extern.slf4j.Slf4j
+@Slf4j
 public class AdminAuditController {
     private final AuditLogRepository auditLogRepository;
     private final AuditLogMapper auditLogMapper;

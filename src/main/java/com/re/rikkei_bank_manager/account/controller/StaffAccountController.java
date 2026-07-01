@@ -10,6 +10,7 @@ import com.re.rikkei_bank_manager.account.service.AccountService;
 import com.re.rikkei_bank_manager.common.response.ApiResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/staff/accounts")
 @RequiredArgsConstructor
 @Tag(name = "Staff Account Management", description = "Staff Core Account Management API")
-@lombok.extern.slf4j.Slf4j
+@Slf4j
 public class StaffAccountController {
     private final AccountService accountService;
 

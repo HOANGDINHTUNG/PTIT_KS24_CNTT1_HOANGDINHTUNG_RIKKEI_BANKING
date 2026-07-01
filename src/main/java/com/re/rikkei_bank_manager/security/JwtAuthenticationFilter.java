@@ -18,7 +18,9 @@ import java.time.LocalDateTime;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component @RequiredArgsConstructor @Slf4j
+@Component
+@RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final CustomUserDetailsService userDetailsService;

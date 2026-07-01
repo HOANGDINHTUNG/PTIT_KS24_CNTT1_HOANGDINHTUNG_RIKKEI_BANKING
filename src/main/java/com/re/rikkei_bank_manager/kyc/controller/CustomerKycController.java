@@ -6,19 +6,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import com.re.rikkei_bank_manager.common.response.ApiResult;
 import com.re.rikkei_bank_manager.kyc.dto.response.KycResponse;
 import com.re.rikkei_bank_manager.kyc.service.KycService;
-import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/v1/customer/kyc")
 @RequiredArgsConstructor
 @Tag(name = "Customer KYC Management", description = "Customer KYC Upload API")
-@lombok.extern.slf4j.Slf4j
+@Slf4j
 public class CustomerKycController {
     private final KycService kycService;
 

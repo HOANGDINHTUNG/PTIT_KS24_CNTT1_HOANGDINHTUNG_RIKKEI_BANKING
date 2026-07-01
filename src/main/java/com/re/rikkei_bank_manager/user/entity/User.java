@@ -8,10 +8,16 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
-@Entity @Table(name = "users")
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "users")
 public class User {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true, length = 50)
@@ -31,6 +37,10 @@ public class User {
 
     @Column(name = "is_kyc", nullable = false)
     private boolean kyc;
+
+    @Column(name = "failed_login_attempts", nullable = false)
+    @Builder.Default
+    private int failedLoginAttempts = 0;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

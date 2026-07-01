@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.UUID;
 
-@Service @ConditionalOnProperty(name = "app.storage.type", havingValue = "local", matchIfMissing = true)
+@Service
+@ConditionalOnProperty(name = "app.storage.type", havingValue = "local", matchIfMissing = true)
 public class LocalStorageService implements StorageService {
     @Value("${app.storage.local-upload-dir:uploads/kyc}")
     private String localUploadDir;

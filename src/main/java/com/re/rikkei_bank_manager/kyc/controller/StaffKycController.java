@@ -7,6 +7,7 @@ import com.re.rikkei_bank_manager.common.response.ApiResult;
 import com.re.rikkei_bank_manager.kyc.dto.response.KycResponse;
 import com.re.rikkei_bank_manager.kyc.service.KycService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/staff/kyc")
 @RequiredArgsConstructor
 @Tag(name = "Staff KYC Management", description = "Staff Verification and KYC Management API")
-@lombok.extern.slf4j.Slf4j
+@Slf4j
 public class StaffKycController {
     private final KycService kycService;
 

@@ -11,6 +11,7 @@ import com.re.rikkei_bank_manager.user.dto.response.UserResponseDto;
 import com.re.rikkei_bank_manager.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/admin/users")
 @RequiredArgsConstructor
 @Tag(name = "Admin User Management", description = "Admin Complete User Management API")
-@lombok.extern.slf4j.Slf4j
+@Slf4j
 public class AdminUserController {
     private final UserService userService;
 

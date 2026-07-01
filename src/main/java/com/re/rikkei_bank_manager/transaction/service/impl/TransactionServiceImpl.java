@@ -25,7 +25,10 @@ import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service @RequiredArgsConstructor @Transactional(readOnly = true) @Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+@Slf4j
 public class TransactionServiceImpl implements TransactionService {
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
@@ -53,6 +56,15 @@ public class TransactionServiceImpl implements TransactionService {
 
             validateTransfer(user, from, to, req);
             BigDecimal amount = req.getAmount();
+
+            LocalDateTime startOfDay = LocalDateTime.now().with(java.time.LocalTime.MIN);
+            LocalDateTime endOfDay = LocalDateTime.now().with(java.time.LocalTime.MAX);
+            BigDecimal dailySum = transactionRepository.calculateDailyTransferSum(from.getId(), startOfDay, endOfDay);
+            if (dailySum == null) dailySum = BigDecimal.ZERO;
+            if (dailySum.add(amount).compareTo(new BigDecimal("500000000")) > 0) {
+                throw new BadRequestException("Hạn mức chuyển tiền trong ngày đã vượt quá 500,000,000 VND. Tổng đã chuyển hôm nay: " + dailySum + " VND");
+            }
+
             from.setBalance(from.getBalance().subtract(amount));
             to.setBalance(to.getBalance().add(amount));
 

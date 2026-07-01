@@ -51,6 +51,7 @@ public class JwtService {
         Date now = new Date();
         return Jwts.builder()
                 .claims(claims)
+                .id(UUID.randomUUID().toString())
                 .subject(subject)
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + expirationMs))

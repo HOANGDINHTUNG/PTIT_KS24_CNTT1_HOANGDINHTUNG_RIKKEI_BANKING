@@ -10,7 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Map;
 
-@Service @ConditionalOnProperty(name = "app.storage.type", havingValue = "cloudinary")
+@Service
+@ConditionalOnProperty(name = "app.storage.type", havingValue = "cloudinary")
 public class CloudinaryStorageService implements StorageService {
     private final Cloudinary cloudinary;
 

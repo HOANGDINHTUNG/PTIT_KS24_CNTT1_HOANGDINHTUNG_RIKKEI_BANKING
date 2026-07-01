@@ -22,7 +22,10 @@ import java.util.Set;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service @RequiredArgsConstructor @Transactional(readOnly = true) @Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+@Slf4j
 public class KycServiceImpl implements KycService {
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
     private static final Set<String> ALLOWED_TYPES = Set.of("image/jpeg", "image/png", "application/pdf");

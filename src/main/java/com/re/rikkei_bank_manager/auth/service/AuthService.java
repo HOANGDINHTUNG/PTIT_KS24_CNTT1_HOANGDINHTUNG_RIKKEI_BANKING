@@ -16,4 +16,5 @@ public interface AuthService {
     void logout(String authorizationHeader);
     ForgotPasswordResponse forgotPassword(ForgotPasswordRequest req);
     void resetPassword(ResetPasswordRequest req);
+    void changePassword(com.re.rikkei_bank_manager.auth.dto.request.ChangePasswordRequest req);
 }

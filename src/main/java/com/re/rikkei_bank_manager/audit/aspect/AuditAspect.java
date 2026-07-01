@@ -11,7 +11,9 @@ import org.aspectj.lang.*;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
-@Aspect @Component @RequiredArgsConstructor
+@Aspect
+@Component
+@RequiredArgsConstructor
 public class AuditAspect {
     private static final ThreadLocal<Long> START_TIME = new ThreadLocal<>();
     private final AuditLogService auditLogService;

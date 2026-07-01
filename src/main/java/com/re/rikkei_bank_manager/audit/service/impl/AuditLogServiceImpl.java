@@ -4,11 +4,13 @@ import com.re.rikkei_bank_manager.audit.entity.AuditLog;
 import com.re.rikkei_bank_manager.audit.repository.AuditLogRepository;
 import com.re.rikkei_bank_manager.audit.service.AuditLogService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.*;
 
-@Service @RequiredArgsConstructor
-@lombok.extern.slf4j.Slf4j
+@Service
+@RequiredArgsConstructor
+@Slf4j
 public class AuditLogServiceImpl implements AuditLogService {
     private final AuditLogRepository auditLogRepository;
 

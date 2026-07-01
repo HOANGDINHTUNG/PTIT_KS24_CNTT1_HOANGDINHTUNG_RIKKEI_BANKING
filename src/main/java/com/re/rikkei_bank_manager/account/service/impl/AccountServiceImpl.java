@@ -23,7 +23,10 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service @RequiredArgsConstructor @Transactional(readOnly = true) @Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+@Slf4j
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;

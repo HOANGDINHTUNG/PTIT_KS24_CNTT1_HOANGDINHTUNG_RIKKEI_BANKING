@@ -12,4 +12,7 @@ public interface TransactionRepository extends JpaRepository<BankTransaction, Lo
             order by t.createdAt desc
             """)
     Page<BankTransaction> findStatementByAccountId(@Param("accountId") Long accountId, Pageable pageable);
+
+    @Query("SELECT SUM(t.amount) FROM BankTransaction t WHERE t.fromAccount.id = :accountId AND t.createdAt BETWEEN :startOfDay AND :endOfDay AND t.status = 'SUCCESS'")
+    java.math.BigDecimal calculateDailyTransferSum(@Param("accountId") Long accountId, @Param("startOfDay") java.time.LocalDateTime startOfDay, @Param("endOfDay") java.time.LocalDateTime endOfDay);
 }

@@ -7,17 +7,14 @@ import com.re.rikkei_bank_manager.auth.dto.request.ForgotPasswordRequest;
 import com.re.rikkei_bank_manager.auth.dto.request.LoginRequest;
 import com.re.rikkei_bank_manager.auth.dto.request.RegisterRequest;
 import com.re.rikkei_bank_manager.auth.dto.request.RefreshTokenRequest;
-import com.re.rikkei_bank_manager.auth.dto.request.RegisterKycRequest;
 import com.re.rikkei_bank_manager.auth.dto.request.ResetPasswordRequest;
 import com.re.rikkei_bank_manager.auth.dto.response.AuthResponse;
 import com.re.rikkei_bank_manager.auth.dto.response.ForgotPasswordResponse;
 import com.re.rikkei_bank_manager.auth.service.AuthService;
 import com.re.rikkei_bank_manager.common.response.ApiResult;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping({"/api/auth", "/api/v1/auth"})
 @RequiredArgsConstructor
 @Tag(name = "Authentication", description = "Authentication, Registration, and JWT Version Control API")
-@lombok.extern.slf4j.Slf4j
+@Slf4j
 public class AuthController {
     private final AuthService authService;
 
@@ -131,6 +128,21 @@ public class AuthController {
             authService.resetPassword(req);
             log.info("Phản hồi đặt lại mật khẩu thành công.");
             return ResponseEntity.ok(ApiResult.success("Reset password successfully", null));
+        } catch (Exception e) {
+            log.error("Lỗi trong quá trình đổi mật khẩu: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Operation(summary = "Change Password", description = "User changes their own password.")
+    @ApiResponse(responseCode = "200", description = "Changed successfully")
+    @PostMapping("/change-password")
+    public ResponseEntity<ApiResult<Void>> changePassword(@Valid @RequestBody com.re.rikkei_bank_manager.auth.dto.request.ChangePasswordRequest req) {
+        log.info("Gửi request đổi mật khẩu.");
+        try {
+            authService.changePassword(req);
+            log.info("Phản hồi đổi mật khẩu thành công.");
+            return ResponseEntity.ok(ApiResult.success("Changed password successfully", null));
         } catch (Exception e) {
             log.error("Lỗi trong quá trình đổi mật khẩu: {}", e.getMessage(), e);
             throw e;

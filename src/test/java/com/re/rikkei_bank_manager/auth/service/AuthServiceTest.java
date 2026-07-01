@@ -2,7 +2,6 @@ package com.re.rikkei_bank_manager.auth.service;
 
 import com.re.rikkei_bank_manager.auth.dto.request.*;
 import com.re.rikkei_bank_manager.auth.dto.response.AuthResponse;
-import com.re.rikkei_bank_manager.auth.entity.*;
 import com.re.rikkei_bank_manager.auth.mapper.AuthMapper;
 import com.re.rikkei_bank_manager.auth.repository.*;
 import com.re.rikkei_bank_manager.common.enums.RoleName;

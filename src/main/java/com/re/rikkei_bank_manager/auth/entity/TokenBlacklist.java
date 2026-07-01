@@ -5,8 +5,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
-@Entity @Table(name = "token_blacklist")
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "token_blacklist")
 public class TokenBlacklist {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -10,6 +10,7 @@ import com.re.rikkei_bank_manager.account.service.AccountService;
 import com.re.rikkei_bank_manager.common.response.ApiResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequestMapping("/api/v1/customer/accounts")
 @RequiredArgsConstructor
 @Tag(name = "Customer Account", description = "Customer Personal Account API")
-@lombok.extern.slf4j.Slf4j
+@Slf4j
 public class CustomerAccountController {
     private final AccountService accountService;
 

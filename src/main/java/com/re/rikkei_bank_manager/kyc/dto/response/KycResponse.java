@@ -4,7 +4,11 @@ import com.re.rikkei_bank_manager.common.enums.KycStatus;
 import lombok.*;
 import java.time.*;
 
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class KycResponse {
     private Long id;
     private String idNumber;

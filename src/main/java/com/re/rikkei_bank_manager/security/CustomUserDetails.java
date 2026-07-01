@@ -7,7 +7,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 
-@Getter @RequiredArgsConstructor
+@Getter
+@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
     private final User user;
 

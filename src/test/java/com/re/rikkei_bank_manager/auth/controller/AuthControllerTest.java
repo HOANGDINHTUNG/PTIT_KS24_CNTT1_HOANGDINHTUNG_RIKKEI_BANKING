@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -25,15 +25,15 @@ public class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private AuthService authService;
     
-    // Khai báo MockBean cho các security components tránh load context lỗi
-    @MockBean private com.re.rikkei_bank_manager.security.JwtAuthenticationFilter jwtAuthenticationFilter;
-    @MockBean private com.re.rikkei_bank_manager.security.CustomUserDetailsService customUserDetailsService;
-    @MockBean private com.re.rikkei_bank_manager.security.UnauthorizedEntryPoint unauthorizedEntryPoint;
-    @MockBean private com.re.rikkei_bank_manager.security.ForbiddenAccessDeniedHandler forbiddenAccessDeniedHandler;
-    @MockBean private com.re.rikkei_bank_manager.security.JwtService jwtService;
+    // Khai báo MockitoBean cho các security components tránh load context lỗi
+    @MockitoBean private com.re.rikkei_bank_manager.security.JwtAuthenticationFilter jwtAuthenticationFilter;
+    @MockitoBean private com.re.rikkei_bank_manager.security.CustomUserDetailsService customUserDetailsService;
+    @MockitoBean private com.re.rikkei_bank_manager.security.UnauthorizedEntryPoint unauthorizedEntryPoint;
+    @MockitoBean private com.re.rikkei_bank_manager.security.ForbiddenAccessDeniedHandler forbiddenAccessDeniedHandler;
+    @MockitoBean private com.re.rikkei_bank_manager.security.JwtService jwtService;
 
     @Autowired
     private ObjectMapper objectMapper;
